@@ -1,0 +1,11 @@
+exportPattern("(Estimate|Score|Wald|SpecTest$)")
+
+import(sandwich, Matrix)
+
+S3method(print, chisq.test)
+
+S3method(print, iwe)
+S3method(print, rwe)
+
+S3method(SpecTest, iwe)
+S3method(SpecTest, rwe)

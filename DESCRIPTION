@@ -1,0 +1,10 @@
+Package: GSSU
+Type: Package
+Title: Estimate the sample-weighted effect as in Gibbons et al. (2014)
+Version: 1.0
+Date: 2014-06-28
+Author: Charles E. Gibbons
+Maintainer: Charlie Gibbons <charlie.gibbons@brattle.com>
+Description: This package estimates the interaction-weighted and regression-weighted effects (IWE and RWE respectively) as derived in Gibbons, Suarez Serrato, and Urbancic (2014). It also implements specification tests for both estimators and the Wald and score tests for heterogeneous treatment effects.
+Depends: sandwich, Matrix
+License: GPL-3
