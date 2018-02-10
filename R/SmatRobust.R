@@ -1,4 +1,3 @@
-SmatRobust <-
-function(h){
+SmatRobust <- function(h){
   S <- crossprod(h) / nrow(h)
 }

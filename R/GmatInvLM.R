@@ -1,4 +1,3 @@
-GmatInvLM <-
-function(model){
+GmatInvLM <- function(model){
   mat <- bread(model)
 }

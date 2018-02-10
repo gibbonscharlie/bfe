@@ -1,4 +1,3 @@
-hmatModel <-
-function(model){
+hmatModel <- function(model){
   h <- estfun(model)
 }

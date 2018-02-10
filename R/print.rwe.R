@@ -9,7 +9,6 @@ function(x, digits = 4, ...){
 
   results <- as.matrix(results)
 
-  cat("\n")
   cat("Regression weighted estimator results: \n\n")
   print(round(results, digits = digits))
   diff.pct <- (x$fe.est - x$swe.est) / x$fe.est * 100

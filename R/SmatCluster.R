@@ -1,5 +1,4 @@
-SmatCluster <-
-function(h, cluster.as.variable){
+SmatCluster <- function(h, cluster.as.variable){
   h.by.cluster <- apply(h, 2, function(col){
     tapply(col, cluster.as.variable, sum)
   })
