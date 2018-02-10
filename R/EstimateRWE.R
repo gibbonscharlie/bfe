@@ -12,7 +12,7 @@ EstimateRWE <- function(y, treatment, group, controls, fe.other = NULL, data, su
   CheckSweInputs(y, treatment, group, controls, fe.other, data, subset,
     cluster.var, is.robust)
   data <- droplevels(data)
-  
+
   ## Coerce if necessary
   if(!class(data[[group]]) %in% c("character", "factor")){
     data[[group]] <- as.character(data[[group]])
@@ -35,13 +35,11 @@ EstimateRWE <- function(y, treatment, group, controls, fe.other = NULL, data, su
   formula.base <- formula(formula.base)
   formula.int  <- formula(formula.int)
 
-  if(!is.null(subset)){
-    obs.subset <- eval(subset, data) & !is.na(data[[y]]) & ! is.na(data[[treatment]])
-  } else {
-    obs.subset <- NULL
-  }
-  ### 'reg.t' is done in 'lm' so that 'group' variable can be grabbed from the
-  ### model frame and used in 'by' below
+  ## Need to ensure no missing values for these varaibles in particular
+  ## (Others will automatically get excluded in models below)
+  data <- data[!is.na(data[[y]]) & !is.na(data[[treatment]]), ]
+
+  ## Annihilated models
   reg.t.c <- call("lm", formula = formula.annihilate.t, data = data)
   reg.t <- eval(reg.t.c)
   reg.y.c <- call("lm", formula = formula.annihilate.y, data = data)
