@@ -1,6 +1,8 @@
 exportPattern("(Estimate|Score|Wald|SpecTest$)")
 
 import(sandwich, Matrix)
+importFrom("stats", "formula", "lm", "model.matrix", "pchisq", "pnorm",
+           "var")
 
 S3method(print, chisq.test)
 
