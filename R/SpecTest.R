@@ -1,3 +1,3 @@
-SpecTest <- function(model, data){
+SpecTest <- function(model){
   UseMethod("SpecTest", model)
 }
