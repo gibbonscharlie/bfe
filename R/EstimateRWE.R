@@ -84,7 +84,7 @@ EstimateRWE <- function(y, treatment, group, controls, fe.other = NULL, data, su
 
   ## Results
   results <- list(y = y, group = group, treatment = treatment,
-    controls = controls,  fe.other = fe.other, covariates = covariates,
+    controls = controls,  fe.other = fe.other,
     cluster.var = cluster.var, subset = subset, is.robust = is.robust, N = N, M = M,
     formula.fe = formula.base, formula.int = formula.int,
     fe.est = fe.est, fe.var = fe.var, swe.est = swe.est, swe.var = swe.var,

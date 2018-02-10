@@ -4,15 +4,13 @@
 \alias{print.iwe}
 \alias{print.rwe}
 \title{Estimate the sample-weighted effect}
-\description{These functions estimate the sample-weighted effects using the interaction-weighted and regression-weighted estimators (IWE and RWE respectively) as described in Gibbons, Suarez Serrato, and Urbancic (2014).}
+\description{These functions estimate the sample-weighted effects using the interaction-weighted and regression-weighted estimators (IWE and RWE respectively) as described in Gibbons, Suarez Serrato, and Urbancic (2018).}
 \usage{
-EstimateIWE(y, treatment, group, controls, fe.other = NULL, data, 
-    subset = NULL, cluster.var = NULL, is.robust = TRUE, 
-    is.data.returned = FALSE)
+EstimateIWE(y, treatment, group, controls, fe.other = NULL, data,
+    subset = NULL, cluster.var = NULL, is.robust = TRUE)
 
-EstimateRWE(y, treatment, group, controls, fe.other = NULL, data, 
-    subset = NULL, cluster.var = NULL, is.robust = TRUE, 
-    is.data.returned = FALSE)
+EstimateRWE(y, treatment, group, controls, fe.other = NULL, data,
+    subset = NULL, cluster.var = NULL, is.robust = TRUE)
 
 \method{print}{iwe}(x, digits = 4, ...)
 \method{print}{rwe}(x, digits = 4, ...)
@@ -27,19 +25,18 @@ EstimateRWE(y, treatment, group, controls, fe.other = NULL, data,
   \item{subset}{A subsetting condition}
   \item{cluster.var}{Character vector of length 1 giving tne name of the variable used for clustering standard errors}
   \item{is.robust}{Logical; should robust standard errors be used. Currently must be TRUE}
-  \item{is.data.returned}{Logical; should the data set be returned in the model object.}
   \item{x}{IWE or RWE model}
   \item{digits}{Number of digits to display in printed tables}
   \item{...}{Not currently used}
 }
 \value{The object returned is a list of class 'iwe' or 'rwe' as appropriate.
   \item{y}{Character vector of length 1 giving the name of the outcome variable}
-  \item{treatment}{Character vector of length 1 giving the name of the treatment variable}
   \item{group}{Character vector of length 1 giving the name of the fixed effect group with heterogeneous treatment effects; must be a factor variable}
+  \item{treatment}{Character vector of length 1 giving the name of the treatment variable}
   \item{controls}{Character vector giving names of control variables. Can be any value acceptable between plus signs in a formula (such as interactions or functions of variables)}
   \item{fe.other}{Character vector giving names of additional fixed effects variables. These variables can also be part of the vector passed to the 'controls' argument, but this argument allows future integratiion with the 'lfe' package}
-  \item{subset}{A subsetting condition}
   \item{cluster.var}{Character vector of length 1 giving tne name of the variable used for clustering standard errors}
+  \item{subset}{A subsetting condition}
   \item{is.robust}{Logical; should robust standard errors be used. Currently must be TRUE}
   \item{N}{Number of observations}
   \item{M}{Number of fixed effects groups}
@@ -53,10 +50,11 @@ EstimateRWE(y, treatment, group, controls, fe.other = NULL, data,
   \item{reg.fe}{For the IWE estimate: OLS (uninteracted) regression; for the RWE estimate: regression of annihilated y on annihilated treatment}
   \item{reg.int}{Interacted regression (for IWE estimate only)}
   \item{reg.w}{Weighted regression of annihilated y on annihilated treatment (for RWE estimate only)}
-  \item{data}{Data (possibly subset) used in estimation (if requested)}
+  \item{data}{Data (subset if requested)}
 }
 \references{
-Gibbons, Charles E., Juan Carlos Suarez Serrato, and Michael B. Urbancic. 2014. "Broken or Fixed Effects?"}
+Gibbons, Charles E., Juan Carlos Suarez Serrato, and Michael
+B. Urbancic. 2018. "Broken or Fixed Effects?" \emph{Journal of Econometric Methods}.}
 \examples{
 data(CensusData, package = "GSSU")
 
