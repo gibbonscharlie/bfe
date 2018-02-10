@@ -1,7 +1,7 @@
 ScoreTest <- function(model){
   stopifnot(class(model) == "rwe")
   reg.fe <- model$reg.fe
-  
+
   z.mat <- model.matrix(model$formula.int, data = model$data)
   s.mat <- reg.fe$residuals * z.mat
   s.mat.means <- colMeans(s.mat)
@@ -18,7 +18,7 @@ ScoreTest <- function(model){
 
   c.hinv.mat <- c.mat %*% solve(h.mat)
   meat <-  crossprod(c.hinv.mat,
-    solve(c.mat %*% tcrossprod(solve(h.mat), c.mat), c.hinv.mat))
+    solve(c.mat %*% tcrossprod(solve(h.mat), c.mat))) %*% c.hinv.mat
 
   stat <- nrow(z.mat) * sum(crossprod(s.mat.means, meat) * s.mat.means)
 
