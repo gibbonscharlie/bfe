@@ -1,6 +1,9 @@
 CheckSweInputs <-
 function(y, treatment, group, controls, fe.other, data, subset,
-  cluster.var, is.robust, is.data.returned){
+  cluster.var, is.robust){
+  if(!class(data) == "data.frame"){
+      stop("'data' must be a data frame")
+  }
   vars.df <- names(data)
   if(length(y) == 1L & !class(y) == "character" &
      length(treatment) == 1L & !class(treatment) == "character" &
@@ -11,11 +14,8 @@ function(y, treatment, group, controls, fe.other, data, subset,
      !(is.null(fe.other) || class(fe.other) == "character")){
       stop("'controls' and 'fe.other' must be NULL or character vectors")
   }
-  if(!group %in% vars.df || class(data[[group]]) != "factor"){
-      stop("'group' must be a factor in 'data'")
-  }
-  if(!is.logical(is.robust) | !is.logical(is.data.returned)){
-      stop("'is.logical' and 'is.data.returned' must be TRUE/FALSE")
+  if(!group %in% vars.df){
+      stop("'group' must be a variable in 'data'")
   }
   if(!gsub(".*\\(([^\\(\\)]+)\\).*", "\\1", y) %in% vars.df){
       stop("'y' must be a variable in 'data'")
@@ -23,11 +23,10 @@ function(y, treatment, group, controls, fe.other, data, subset,
   if(!gsub(".*\\(([^\\(\\)]+)\\).*", "\\1", treatment) %in% vars.df){
       stop("'treatment' must be a variable in 'data'")
   }
-  if(!is.null(cluster.var) &
-     !gsub(".*\\(([^\\(\\)]+)\\).*", "\\1", cluster.var) %in% vars.df){
+  if(!is.null(cluster.var) && !cluster.var %in% vars.df){
       stop("'cluster.var' must be a variable in 'data'")
   }
-  if(!class(data) == "data.frame"){
-      stop("'data' must be a data frame")
+  if(!is.logical(is.robust) | length(is.robust) != 1L | !is.robust){
+    stop("'is.robust' must be TRUE")
   }
 }

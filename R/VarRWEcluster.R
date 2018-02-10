@@ -1,5 +1,4 @@
-VarRWEcluster <-
-function(model, cluster.id){
+VarRWEcluster <- function(model, cluster.id, K){
   if(is.null(model$model[["(weights)"]])){
     model$model[["(weights)"]] <- 1
   }

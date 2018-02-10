@@ -1,7 +1,7 @@
-print.iwe <-
-function(x, digits = 4, ...){
+print.iwe <- function(x, digits = 4, ...){
+  ## Identify interaction variables
   t.int <- grepl(paste0("^", x$treatment, "$|^", x$treatment, ":"),
-                 names(x$reg.int$coefficients))
+    names(x$reg.int$coefficients))
 
   if(!is.null(x$cluster.var)){
     var.mat <- "clustervcv"
@@ -29,7 +29,6 @@ function(x, digits = 4, ...){
 
   results <- as.matrix(results)
 
-  cat("\n")
   cat("Interaction weighted estimator results: \n\n")
   print(round(results, digits = digits))
   diff.pct <- (fe.est - swe.est) / fe.est * 100

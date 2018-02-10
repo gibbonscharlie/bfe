@@ -1,5 +1,5 @@
-WaldTestIWE <-
-function(model){
+WaldTestIWE <- function(model){
+  stopifnot(class(model) == "iwe")
   if(!is.null(model$cluster.var)){
     var.mat <- "clustervcv"
   } else if(model$is.robust){
@@ -8,17 +8,22 @@ function(model){
     var.mat <- "vcv"
   }
 
+  ## Create G-1 x K matrix
   r.int <- grepl(paste0("^", model$treatment, ":"), names(model$reg.int$coefficients))
   r.mat <- matrix(0, nrow = sum(r.int), ncol = length(r.int))
+
+  ## Index using matrix of rows and columns that should be 1s
   r.mat[matrix(c(1:nrow(r.mat), which(r.int)), ncol = 2)] <- 1
 
+  ## Calculate variance
   v.r <- r.mat %*% tcrossprod(model$reg.int[[var.mat]], r.mat)
 
   theta <- model$reg.int$coefficients
   r.theta <- r.mat %*% theta
 
-  stat <- crossprod(solve(v.r, r.theta), r.theta)[1,1]
-  results <- c(stat = stat, df = sum(r.int))
+  label <- "Wald test for treatment effect heterogeneity"
+  stat <- crossprod(r.theta, solve(v.r)) %*% r.theta
+  results <- list(stat = as.numeric(stat), df = sum(r.int), label = label)
   class(results) <- "chisq.test"
   return(results)
 }

@@ -1,18 +1,13 @@
-ScoreTest <-
-function(model, data){
+ScoreTest <- function(model){
+  stopifnot(class(model) == "rwe")
   reg.fe <- model$reg.fe
   
-  if(!is.null(model$subset)){
-    data <- data[eval(model$subset, data), ]
-  }
-
-  data <- droplevels(data)
-  z.mat <- model.matrix(model$formula.int, data = data)
+  z.mat <- model.matrix(model$formula.int, data = model$data)
   s.mat <- reg.fe$residuals * z.mat
   s.mat.means <- colMeans(s.mat)
 
   if(!is.null(model$cluster.var)){
-    h.mat <- SmatCluster(s.mat, data[rownames(s.mat), model$cluster.var])
+    h.mat <- SmatCluster(s.mat, model$data[[model$cluster.var]])
   } else {
     h.mat <- SmatRobust(s.mat)
   }
@@ -26,7 +21,10 @@ function(model, data){
     solve(c.mat %*% tcrossprod(solve(h.mat), c.mat), c.hinv.mat))
 
   stat <- nrow(z.mat) * sum(crossprod(s.mat.means, meat) * s.mat.means)
+
+  label <- "Score test for unmodeled treatment effect heterogeneity"
   results <- c(stat = stat, df = sum(r.int))
+  results <- list(stat = stat, df = sum(r.int), label = label)
   class(results) <- "chisq.test"
   return(results)
 }

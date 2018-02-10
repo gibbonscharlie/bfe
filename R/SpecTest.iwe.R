@@ -1,32 +1,28 @@
-SpecTest.iwe <-
-function(model, data){
-  if(!is.null(model$subset)){
-    data <- data[eval(model$subset, data), ]
-  }
-  data <- droplevels(data)
-  
+SpecTest.iwe <- function(model){
   reg.fe  <- model$reg.fe
   reg.int <- model$reg.int
 
+  ## All coefficients from both models
   theta <- c(reg.fe$coefficients, reg.int$coefficients)
-  
+
+  ## Get diagonal matrix of N*(X'X)^{-1} for the models (i.e., the gradients)
   ginv.fe  <- GmatInvLM(reg.fe)
   ginv.int <- GmatInvLM(reg.int)
   ginv <- GmatInv(ginv.fe, ginv.int)
-  ginv <- as.matrix(ginv)
 
+  ## Get the moment conditions and bind the columns
   h.fe  <- hmatModel(reg.fe)
   h.int <- hmatModel(reg.int)
   h <- hmat(h.fe, h.int)
 
+  ## Get meat of calculation
   if(!is.null(model$cluster.var)){
-    obs.cluster <- data[names(reg.int$residuals), model$cluster.var]
-    smat <- SmatCluster(h, obs.cluster)
+    smat <- SmatCluster(h, model$cluster.obs)
   } else if(model$is.robust){
     ### Equivalent to "HC0"
     smat <- SmatRobust(h)
   } else {
-    ### FILL IN
+    ### CHECK: FILL IN
   }
 
   v <- crossprod(ginv, smat) %*% ginv / nrow(h)
@@ -45,8 +41,9 @@ function(model, data){
   diff <- sum(r*theta)
   stat <- diff^2 / v.r
 
-  results <- c(diff = diff, stat = stat[1,1], df = 1)
+  label <- "Specification test for equality between FE and IWE"
+  results <- list(diff = diff, stat = as.numeric(stat), df = 1, label = label)
   class(results) <- "chisq.test"
-  
+
   return(results)
 }

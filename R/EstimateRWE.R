@@ -1,6 +1,5 @@
-EstimateRWE <-
-function(y, treatment, group, controls, fe.other = NULL, data, subset = NULL,
-  cluster.var = NULL, is.robust = TRUE, is.data.returned = FALSE){
+EstimateRWE <- function(y, treatment, group, controls, fe.other = NULL, data, subset = NULL,
+  cluster.var = NULL, is.robust = TRUE){
   subset.check <- try(class(subset), silent = TRUE)
   if(class(subset.check) == "try-error"){
     subset <- substitute(subset)
@@ -9,20 +8,23 @@ function(y, treatment, group, controls, fe.other = NULL, data, subset = NULL,
     subset <- NULL
   }
 
+  ## Check inputs
   CheckSweInputs(y, treatment, group, controls, fe.other, data, subset,
-    cluster.var, is.robust, is.data.returned)
-  stopifnot(is.robust)
+    cluster.var, is.robust)
   data <- droplevels(data)
   
+  ## Coerce if necessary
+  if(!class(data[[group]]) %in% c("character", "factor")){
+    data[[group]] <- as.character(data[[group]])
+  }
+
   covariates <- MakeCovariatesLM(group, treatment, controls, fe.other)
 
+  ## Create annihilator formulas
   formula.annihilate.y <- paste(y,         "~", covariates$fe,
     covariates$controls)
   formula.annihilate.t <- paste(treatment, "~", covariates$fe,
     covariates$controls)
-  formula.annihilate.t <- CheckClusterVar(formula.annihilate.t, group, controls,
-    fe.other, cluster.var)
-  
   formula.annihilate.y <- formula(formula.annihilate.y)
   formula.annihilate.t <- formula(formula.annihilate.t)
 
@@ -46,17 +48,25 @@ function(y, treatment, group, controls, fe.other = NULL, data, subset = NULL,
   reg.y <- eval(reg.y.c)
 
   N <- nrow(reg.t$model)
-  M <- length(levels(data[[group]]))
+  M <- length(unique(data[[group]]))
 
+  ## Check groups in model
   obs.groups <- reg.t$model[[group]]
   if(any(table(obs.groups) < 2)){
     stop("All groups must contain more than one observation for identification")
   }
+
+  ## Calculate weights (lm takes weight defined in paper squared)
   weights <- by(reg.t$residuals, obs.groups, var)
   weights <- 1 / weights[obs.groups]
 
+  ## Base and weighted model coefficients
   reg.fe <- lm(reg.y$residuals ~ reg.t$residuals - 1)
   reg.w  <- lm(reg.y$residuals ~ reg.t$residuals - 1, weights = weights)
+
+  ## Estimates
+  fe.est  <- reg.fe$coefficients[1]
+  swe.est <- reg.w$coefficients[1]
 
   if(!is.null(cluster.var)){
     obs.cluster <- reg.t$model[[cluster.var]]
@@ -69,22 +79,14 @@ function(y, treatment, group, controls, fe.other = NULL, data, subset = NULL,
     swe.var <- 0 ### FILL IN
     fe.var  <- 0 ### FILL IN
   }
-  
-  fe.est  <- reg.fe$coefficients[1]
-  swe.est <- reg.w$coefficients[1]
 
+  ## Results
   results <- list(y = y, group = group, treatment = treatment,
-    controls = covariates,  fe.other = fe.other, subset = subset,
-    cluster.var = cluster.var, is.robust = is.robust, N = N, M = M,
+    controls = controls,  fe.other = fe.other, covariates = covariates,
+    cluster.var = cluster.var, subset = subset, is.robust = is.robust, N = N, M = M,
     formula.fe = formula.base, formula.int = formula.int,
     fe.est = fe.est, fe.var = fe.var, swe.est = swe.est, swe.var = swe.var,
-    reg.fe = reg.fe, reg.w = reg.w)
-  if(is.data.returned){
-    results$data <- data
-  }
-  if(!is.null(cluster.var)){
-    results$obs.cluster <- obs.cluster
-  }
+    reg.fe = reg.fe, reg.w = reg.w, data = data)
   class(results) <- "rwe"
   return(results)
 }
