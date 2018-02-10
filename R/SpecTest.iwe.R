@@ -27,11 +27,17 @@ SpecTest.iwe <- function(model){
 
   v <- crossprod(ginv, smat) %*% ginv / nrow(h)
 
-  f.weights <- model$f.weights
-  f.weights[1] <- 1
-
   r.int <- grepl(paste0("^", model$treatment, "$|^", model$treatment, ":"),
     colnames(h.int))
+
+  ## Identify groups interacted
+  r.int.groups <- gsub(paste0(model$treatment, "|:", model$group), "",
+    colnames(h.int)[r.int])
+  r.int.groups <- r.int.groups[r.int.groups != ""]
+
+  f.weights <- model$f.weights
+  f.weights[!names(f.weights) %in% r.int.groups] <- 1
+
   r.int[r.int] <- f.weights
 
   r <- c(-grepl(paste0("^", model$treatment, "$"), colnames(h.fe)), r.int)
