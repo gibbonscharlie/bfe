@@ -2,8 +2,8 @@ SpecTest.rwe <- function(model){
   theta <- c(model$reg.fe$coefficients[1], model$reg.w$coefficients[1])
 
   ## Get diagonal matrix of N*(X'X)^{-1} for the models (i.e., the gradients)
-  ginv.fe <- GmatInvRWE(model$reg.fe)
-  ginv.w  <- GmatInvRWE(model$reg.w)
+  ginv.fe <- GmatInvLM(model$reg.fe)
+  ginv.w  <- GmatInvLM(model$reg.w)
   ginv <- GmatInv(ginv.fe, ginv.w)
 
   h.fe <- hmatModel(model$reg.fe)
