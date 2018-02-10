@@ -68,15 +68,19 @@ EstimateRWE <- function(y, treatment, group, controls, fe.other = NULL, data, su
   fe.est  <- reg.fe$coefficients[1]
   swe.est <- reg.w$coefficients[1]
 
+  ## Variances
   if(!is.null(cluster.var)){
-    obs.cluster <- reg.t$model[[cluster.var]]
-    swe.var <- VarRWEcluster(reg.w,  obs.cluster)
-    fe.var  <- VarRWEcluster(reg.fe, obs.cluster)
+    ## Number of variables in full model = rank of y model +
+    ## 1 (because treatment was excluded)
+    K <- reg.y$rank + 1
+    cluster.obs <- data[names(reg.t$residuals), cluster.var]
+    swe.var <- VarRWEcluster(reg.w,  cluster.obs, K)
+    fe.var  <- VarRWEcluster(reg.fe, cluster.obs, K)
   } else if(is.robust){
     swe.var <- VarRWErobust(reg.w)
     fe.var  <- VarRWErobust(reg.fe)
   } else {
-    swe.var <- 0 ### FILL IN
+    swe.var <- 0 ### CHECK FILL IN
     fe.var  <- 0 ### FILL IN
   }
 
