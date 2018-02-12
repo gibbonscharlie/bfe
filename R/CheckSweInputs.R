@@ -1,5 +1,4 @@
-CheckSweInputs <-
-function(y, treatment, group, controls, data, subset,
+CheckSweInputs <- function(y, treatment, group, controls, data, subset,
   cluster.var, is.robust){
   if(!class(data) == "data.frame"){
       stop("'data' must be a data frame")

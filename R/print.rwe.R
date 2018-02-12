@@ -1,5 +1,4 @@
-print.rwe <-
-function(x, digits = 4, ...){
+print.rwe <- function(x, digits = 4, ...){
   results <- data.frame(Estimate = c(x$fe.est, x$swe.est))
   results$"Std error" <- c(sqrt(x$fe.var), sqrt(x$swe.var))
   results$"t stat" <- results$Estimate / results$"Std error"
