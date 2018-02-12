@@ -1,4 +1,4 @@
-EstimateRWE <- function(y, treatment, group, controls, fe.other = NULL, data, subset = NULL,
+EstimateRWE <- function(y, treatment, group, controls, data, subset = NULL,
   cluster.var = NULL, is.robust = TRUE){
   subset.check <- try(class(subset), silent = TRUE)
   if(class(subset.check) == "try-error"){
@@ -9,7 +9,7 @@ EstimateRWE <- function(y, treatment, group, controls, fe.other = NULL, data, su
   }
 
   ## Check inputs
-  CheckSweInputs(y, treatment, group, controls, fe.other, data, subset,
+  CheckSweInputs(y, treatment, group, controls, data, subset,
     cluster.var, is.robust)
   data <- droplevels(data)
 
@@ -18,7 +18,7 @@ EstimateRWE <- function(y, treatment, group, controls, fe.other = NULL, data, su
     data[[group]] <- as.character(data[[group]])
   }
 
-  covariates <- MakeCovariatesLM(group, treatment, controls, fe.other)
+  covariates <- MakeCovariatesLM(group, treatment, controls)
 
   ## Create annihilator formulas
   formula.annihilate.y <- paste(y,         "~", covariates$fe,
@@ -84,7 +84,7 @@ EstimateRWE <- function(y, treatment, group, controls, fe.other = NULL, data, su
 
   ## Results
   results <- list(y = y, group = group, treatment = treatment,
-    controls = controls,  fe.other = fe.other,
+    controls = controls,
     cluster.var = cluster.var, subset = subset, is.robust = is.robust, N = N, M = M,
     formula.fe = formula.base, formula.int = formula.int,
     fe.est = fe.est, fe.var = fe.var, swe.est = swe.est, swe.var = swe.var,

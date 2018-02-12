@@ -1,4 +1,4 @@
-EstimateIWE <- function(y, treatment, group, controls, fe.other = NULL, data, subset = NULL,
+EstimateIWE <- function(y, treatment, group, controls, data, subset = NULL,
   cluster.var = NULL, is.robust = TRUE){
   subset.check <- try(class(subset), silent = TRUE)
   if(class(subset.check) == "try-error"){
@@ -9,7 +9,7 @@ EstimateIWE <- function(y, treatment, group, controls, fe.other = NULL, data, su
   }
 
   ## Check inputs
-  CheckSweInputs(y, treatment, group, controls, fe.other, data, subset,
+  CheckSweInputs(y, treatment, group, controls, data, subset,
     cluster.var, is.robust)
   data <- droplevels(data)
 
@@ -18,7 +18,7 @@ EstimateIWE <- function(y, treatment, group, controls, fe.other = NULL, data, su
     data[[group]] <- as.character(data[[group]])
   }
 
-  covariates <- MakeCovariatesLM(group, treatment, controls, fe.other)
+  covariates <- MakeCovariatesLM(group, treatment, controls)
 
   formula.base <- paste(y, "~", treatment, covariates$controls, "+", covariates$fe)
   formula.int  <- paste(y, "~", treatment, "/", group, covariates$controls, "+",
@@ -65,7 +65,7 @@ EstimateIWE <- function(y, treatment, group, controls, fe.other = NULL, data, su
 
   ## Results
   results <- list(y = y, group = group, treatment = treatment, controls = controls,
-    fe.other = fe.other,  cluster.var = cluster.var, subset = subset,
+    cluster.var = cluster.var, subset = subset,
     is.robust = is.robust, N = N, M = M,
     formula.fe = formula.base, formula.int = formula.int, f.weights = f.weights,
     reg.fe = reg.fe, reg.int = reg.int)

@@ -1,5 +1,5 @@
 CheckSweInputs <-
-function(y, treatment, group, controls, fe.other, data, subset,
+function(y, treatment, group, controls, data, subset,
   cluster.var, is.robust){
   if(!class(data) == "data.frame"){
       stop("'data' must be a data frame")
@@ -10,9 +10,8 @@ function(y, treatment, group, controls, fe.other, data, subset,
      length(group) == 1L & !class(group) == "character"){
       stop("'y', 'treatment', and 'group' must be variable names")
   }
-  if(!(is.null(controls) || class(controls) == "character") &
-     !(is.null(fe.other) || class(fe.other) == "character")){
-      stop("'controls' and 'fe.other' must be NULL or character vectors")
+  if(!(is.null(controls) || class(controls) == "character")){
+      stop("'controls' must be NULL or a character vector")
   }
   if(!group %in% vars.df){
       stop("'group' must be a variable in 'data'")

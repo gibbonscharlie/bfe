@@ -1,12 +1,7 @@
-MakeCovariatesLM <-
-function(group, treatment, controls, fe.other){
+MakeCovariatesLM <- function(group, treatment, controls){
   if(!is.null(controls)){
     controls <- paste("+", paste(controls, collapse = " + "))
   }
-  if(!is.null(fe.other)){
-    fe <- paste0(group, " + ", paste(fe.other, collapse = " + "))
-  } else {
-    fe <- group
-  }
+  fe <- group
   return(list(controls = controls, fe = fe))
 }
