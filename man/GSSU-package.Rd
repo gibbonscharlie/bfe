@@ -1,6 +1,6 @@
-\name{GSSU-package}
-\alias{GSSU-package}
-\alias{GSSU}
+\name{bfe-package}
+\alias{bfe-package}
+\alias{bfe}
 \docType{package}
 \title{Estimate the sample-weighted effect as in Gibbons et al. (2018)}
 \description{This package estimates the interaction-weighted and

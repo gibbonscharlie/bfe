@@ -1,9 +1,9 @@
-# GSSU: An R package for linear models in the presence of treatment effect heterogeneity
+# bfe: An R package for linear models in the presence of treatment effect heterogeneity
 
 This package implements the estimators and tests found in Gibbons, Su&#225;rez-Serrato and Urbancic, 2018, "Broken or Fixed Effects?" *Journal of Econometric Methods*. [[article](https://www.degruyter.com/view/j/jem.ahead-of-print/jem-2017-0002/jem-2017-0002.xml)].
 
 ## Installation
-To install the package, first install `devtools` as you normally would, then load the package. Install `GSSU` using `devtools::install_github('gibbonscharlie/GSSU')`. Once the package is out of its early beta stage (see below), it will be uploaded to CRAN.
+To install the package, first install `devtools` as you normally would, then load the package. Install `bfe` using `devtools::install_github('gibbonscharlie/bfe')`. Once the package is out of its early beta stage (see below), it will be uploaded to CRAN.
 
 ## Examples and documentation
 See the help files for documentation, particularly those for `EstimateIWE`, `ScoreTest`, and `SpecTest`.

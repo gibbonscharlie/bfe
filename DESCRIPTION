@@ -1,4 +1,4 @@
-Package: GSSU
+Package: bfe
 Type: Package
 Title: Estimate the sample-weighted effect as in Gibbons et al. (2018)
 Version: 2.0

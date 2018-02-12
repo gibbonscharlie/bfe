@@ -26,7 +26,7 @@ WaldTestIWE(model)
 		Econometric Methods}.}
 
 \examples{
-data(CensusData, package = "GSSU")
+data(CensusData, package = "bfe")
 
 wage.iwe <- EstimateIWE("lnww", "educ", "age_dum", c("state", "year", "birthpl"),
   NULL, CensusData, NULL, "st.year")

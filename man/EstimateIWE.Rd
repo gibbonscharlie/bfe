@@ -54,7 +54,7 @@ EstimateRWE(y, treatment, group, controls, data,
 Gibbons, Charles E., Juan Carlos Suarez Serrato, and Michael
 B. Urbancic, 2018. "Broken or Fixed Effects?" \emph{Journal of Econometric Methods}.}
 \examples{
-data(CensusData, package = "GSSU")
+data(CensusData, package = "bfe")
 
 ### Estimate the impact of eduction on log wages with heterogeneity by age group
 wage.iwe <- EstimateIWE("lnww", "educ", "age_dum", c("state", "year", "birthpl"),
