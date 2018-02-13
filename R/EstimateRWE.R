@@ -67,10 +67,10 @@ EstimateRWE <- function(y, treatment, group, controls, data, subset = NULL,
   swe.est <- reg.w$coefficients[1]
 
   ## Variances
+  K <- reg.y$rank + 1
   if(!is.null(cluster.var)){
     ## Number of variables in full model = rank of y model +
     ## 1 (because treatment was excluded)
-    K <- reg.y$rank + 1
     cluster.obs <- data[names(reg.t$residuals), cluster.var]
     swe.var <- VarRWEcluster(reg.w,  cluster.obs, K)
     fe.var  <- VarRWEcluster(reg.fe, cluster.obs, K)
