@@ -65,11 +65,17 @@ EstimateIWE <- function(y, treatment, group, controls, data, subset = NULL,
     reg.int$vcv <- vcovHC(reg.int, type = "const")
   }
 
+  ## Calculate estimates/variances for FE estimate
+  fe.est  <- reg.fe$coefficients[treatment]
+  fe.var  <- reg.fe$vcv[treatment, treatment]
+  swe <- CalculateIWE(reg.int, treatment, group, f.weights)
+
   ## Results
   results <- list(y = y, group = group, treatment = treatment, controls = controls,
     cluster.var = cluster.var, subset = subset,
     is.robust = is.robust, N = N, M = M,
     formula.fe = formula.base, formula.int = formula.int, f.weights = f.weights,
+    fe.est = fe.est, fe.var = fe.var, swe.est = swe$swe.est, swe.var = swe$swe.var,
     reg.fe = reg.fe, reg.int = reg.int)
   if(!is.null(cluster.var)){
     results$cluster.obs <- cluster.obs
