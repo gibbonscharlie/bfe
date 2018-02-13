@@ -75,11 +75,11 @@ EstimateRWE <- function(y, treatment, group, controls, data, subset = NULL,
     swe.var <- VarRWEcluster(reg.w,  cluster.obs, K)
     fe.var  <- VarRWEcluster(reg.fe, cluster.obs, K)
   } else if(is.robust){
-    swe.var <- VarRWErobust(reg.w)
-    fe.var  <- VarRWErobust(reg.fe)
+    swe.var <- VarRWErobust(reg.w, K)
+    fe.var  <- VarRWErobust(reg.fe, K)
   } else {
-    swe.var <- 0 ### CHECK FILL IN
-    fe.var  <- 0 ### FILL IN
+    swe.var <- VarRWEstandard(reg.w,  K)
+    fe.var  <- VarRWEstandard(reg.fe, K)
   }
 
   ## Results

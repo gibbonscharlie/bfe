@@ -44,10 +44,11 @@ EstimateIWE <- function(y, treatment, group, controls, data, subset = NULL,
   ## Base variance-covariance matrix
   if(!is.null(cluster.var)){
     cluster.obs <- data[names(reg.fe$residuals), cluster.var]
-    reg.fe$clustervcv <- ClusterVCV(reg.fe, cluster.obs)
-  }
-  if(is.robust){
-    reg.fe$robustvcv <- vcovHC(reg.fe)
+    reg.fe$vcv <- ClusterVCV(reg.fe, cluster.obs)
+  } else if(is.robust){
+    reg.fe$vcv <- vcovHC(reg.fe, type = "HC1") # Matches Stata
+  } else {
+    reg.fe$vcv <- vcovHC(reg.fe, type = "const")
   }
 
   ## Interacted model
@@ -57,10 +58,11 @@ EstimateIWE <- function(y, treatment, group, controls, data, subset = NULL,
 
   ## Interacted variance-covariance matrix
   if(!is.null(cluster.var)){
-    reg.int$clustervcv <- ClusterVCV(reg.int, data[names(reg.int$residuals), cluster.var])
-  }
-  if(is.robust){
-    reg.int$robustvcv <- vcovHC(reg.int)
+    reg.int$vcv <- ClusterVCV(reg.int, data[names(reg.int$residuals), cluster.var])
+  } else if(is.robust){
+    reg.int$vcv <- vcovHC(reg.int, type = "HC1") # Matches Stata
+  } else {
+    reg.int$vcv <- vcovHC(reg.int, type = "const")
   }
 
   ## Results

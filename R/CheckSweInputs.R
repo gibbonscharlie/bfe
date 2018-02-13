@@ -24,7 +24,7 @@ CheckSweInputs <- function(y, treatment, group, controls, data, subset,
   if(!is.null(cluster.var) && !cluster.var %in% vars.df){
       stop("'cluster.var' must be a variable in 'data'")
   }
-  if(!is.logical(is.robust) | length(is.robust) != 1L | !is.robust){
-    stop("'is.robust' must be TRUE")
+  if(!is.logical(is.robust) | length(is.robust) != 1L){
+    stop("'is.robust' must be boolean")
   }
 }
