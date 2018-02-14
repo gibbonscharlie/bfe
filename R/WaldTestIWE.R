@@ -1,13 +1,5 @@
 WaldTestIWE <- function(model){
   stopifnot(class(model) == "iwe")
-  if(!is.null(model$cluster.var)){
-    var.mat <- "clustervcv"
-  } else if(model$is.robust){
-    var.mat <- "robustvcv"
-  } else {
-    var.mat <- "vcv"
-  }
-
   ## Create G-1 x K matrix
   r.int <- grepl(paste0("^", model$treatment, ":"), names(model$reg.int$coefficients))
   r.mat <- matrix(0, nrow = sum(r.int), ncol = length(r.int))
@@ -16,7 +8,7 @@ WaldTestIWE <- function(model){
   r.mat[matrix(c(1:nrow(r.mat), which(r.int)), ncol = 2)] <- 1
 
   ## Calculate variance
-  v.r <- r.mat %*% tcrossprod(model$reg.int[[var.mat]], r.mat)
+  v.r <- r.mat %*% tcrossprod(model$reg.int$vcv, r.mat)
 
   theta <- model$reg.int$coefficients
   r.theta <- r.mat %*% theta
